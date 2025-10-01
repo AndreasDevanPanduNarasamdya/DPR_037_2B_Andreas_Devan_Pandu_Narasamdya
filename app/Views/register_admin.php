@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Register Admin</title>
     <style>
         body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f4f4; padding: 20px 0; }
         .register-container { padding: 40px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff; width: 400px; }
@@ -20,10 +20,10 @@
 <body>
     <div class="register-container">
         <h2>Register As Admin</h2>
-
         <?php $validation = \Config\Services::validation(); ?>
         
         <form action="/register/process" method="POST">
+            <input type="hidden" name="role" value="Admin">
             
             <div class="form-group">
                 <label for="nama_depan">First Name:</label>
@@ -32,7 +32,6 @@
                     <div class="error-message"><?= $validation->getError('nama_depan') ?></div>
                 <?php endif; ?>
             </div>
-
             <div class="form-group">
                 <label for="nama_belakang">Last Name (Optional):</label>
                 <input type="text" id="nama_belakang" name="nama_belakang" value="<?= old('nama_belakang') ?>">
@@ -40,7 +39,6 @@
                     <div class="error-message"><?= $validation->getError('nama_belakang') ?></div>
                 <?php endif; ?>
             </div>
-
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" value="<?= old('username') ?>" required>
@@ -48,7 +46,6 @@
                     <div class="error-message"><?= $validation->getError('username') ?></div>
                 <?php endif; ?>
             </div>
-            
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" value="<?= old('email') ?>" required>
@@ -56,7 +53,6 @@
                     <div class="error-message"><?= $validation->getError('email') ?></div>
                 <?php endif; ?>
             </div>
-
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required pattern=".{8,}" title="Your password must be at least 8 characters long.">
@@ -68,8 +64,7 @@
             <p>
                 <a href="/register">Register As Public</a>
             </p>
-
-            <button type="submit">Register Account</button>
+            <button type="submit">Register Admin Account</button>
         </form>
     </div>
 </body>

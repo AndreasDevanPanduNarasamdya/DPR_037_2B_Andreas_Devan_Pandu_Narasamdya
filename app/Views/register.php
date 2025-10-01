@@ -20,10 +20,10 @@
 <body>
     <div class="register-container">
         <h2>Register As Public</h2>
-
         <?php $validation = \Config\Services::validation(); ?>
         
         <form action="/register/process" method="POST">
+            <input type="hidden" name="role" value="Public">
             
             <div class="form-group">
                 <label for="nama_depan">First Name:</label>
@@ -32,7 +32,6 @@
                     <div class="error-message"><?= $validation->getError('nama_depan') ?></div>
                 <?php endif; ?>
             </div>
-
             <div class="form-group">
                 <label for="nama_belakang">Last Name (Optional):</label>
                 <input type="text" id="nama_belakang" name="nama_belakang" value="<?= old('nama_belakang') ?>">
@@ -40,7 +39,6 @@
                     <div class="error-message"><?= $validation->getError('nama_belakang') ?></div>
                 <?php endif; ?>
             </div>
-
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" value="<?= old('username') ?>" required>
@@ -48,7 +46,6 @@
                     <div class="error-message"><?= $validation->getError('username') ?></div>
                 <?php endif; ?>
             </div>
-            
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" value="<?= old('email') ?>" required>
@@ -56,7 +53,6 @@
                     <div class="error-message"><?= $validation->getError('email') ?></div>
                 <?php endif; ?>
             </div>
-
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required pattern=".{8,}" title="Your password must be at least 8 characters long.">
@@ -64,11 +60,9 @@
                     <div class="error-message"><?= $validation->getError('password') ?></div>
                 <?php endif; ?>
             </div>
-
             <p>
-                <a href="/registerasadmin">Register As Admin</a>
+                <a href="/register_admin">Register As Admin</a>
             </p>
-
             <button type="submit">Register Account</button>
         </form>
     </div>

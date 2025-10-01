@@ -7,13 +7,13 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 // --- Public Routes ---
-// The login page is the homepage
+// The login page is the homepage.
 $routes->get('/', 'Home::index');
 
 // Registration Flow
-$routes->get('register', 'AccountController::register');
-$routes->get('registerasadmin', 'AccountController::registerasadmin');
-$routes->post('register/process', 'AccountController::registerProcess');
+$routes->get('register', 'AccountController::register'); // Shows public registration form
+$routes->get('register_admin', 'AccountController::registerAdmin'); // Shows admin registration form
+$routes->post('register/process', 'AccountController::registerProcess'); // Handles BOTH form submissions
 
 // Login and Logout Flow
 $routes->post('login/process', 'AccountController::loginProcess');
@@ -21,8 +21,7 @@ $routes->get('logout', 'AccountController::logout');
 
 
 // --- Protected Routes (Pages that require login) ---
-// Any route in this group will first run the 'auth' filter.
-// This is how you protect the DPR table view.
+// Any route in this group will first run the 'auth' filter (our "bouncer").
 $routes->group('', ['filter' => 'auth'], function($routes) {
     
     $routes->get('dpr-gaji', 'Dpr::index');
@@ -30,5 +29,5 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
     
 });
 
-// Disable auto-routing for better security
+// Disable auto-routing for better security.
 $routes->setAutoRoute(false);

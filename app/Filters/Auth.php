@@ -19,6 +19,6 @@ class Auth implements FilterInterface
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        // Do nothing here
+        // Do nothing here.
     }
 }

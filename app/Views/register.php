@@ -61,7 +61,7 @@
                 <?php endif; ?>
             </div>
             <p>
-                <a href="/register_admin">Register As Admin</a>
+                <a href="/register/admin">Register As Admin</a>
             </p>
             <button type="submit">Register Account</button>
         </form>

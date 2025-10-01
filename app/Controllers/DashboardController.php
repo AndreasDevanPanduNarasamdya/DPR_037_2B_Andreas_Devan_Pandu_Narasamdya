@@ -9,6 +9,6 @@ class DashboardController extends BaseController
         $data = [
             'username' => session()->get('username')
         ];
-        return view('dpr_gaji_view');
+        return view('dashboard', $data);
     }
 }

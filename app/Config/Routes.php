@@ -12,6 +12,7 @@ $routes->get('/', 'Home::index');
 
 // Registration Flow
 $routes->get('register', 'AccountController::register');
+$routes->get('registerasadmin', 'AccountController::registerasadmin');
 $routes->post('register/process', 'AccountController::registerProcess');
 
 // Login and Logout Flow

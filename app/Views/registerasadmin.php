@@ -19,7 +19,7 @@
 </head>
 <body>
     <div class="register-container">
-        <h2>Register As Public</h2>
+        <h2>Register As Admin</h2>
 
         <?php $validation = \Config\Services::validation(); ?>
         
@@ -66,7 +66,7 @@
             </div>
 
             <p>
-                <a href="/registerasadmin">Register As Admin</a>
+                <a href="/register">Register As Public</a>
             </p>
 
             <button type="submit">Register Account</button>

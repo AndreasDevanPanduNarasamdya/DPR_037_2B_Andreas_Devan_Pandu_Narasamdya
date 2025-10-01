@@ -12,6 +12,11 @@ class AccountController extends BaseController
         return view('register');
     }
 
+    public function registerasadmin()
+    {
+        return view('registerasadmin');
+    }
+
     public function registerProcess()
     {
         // 1. Set validation rules

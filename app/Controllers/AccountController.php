@@ -6,25 +6,9 @@ use App\Models\UsersModel;
 
 class AccountController extends BaseController
 {
-    /**
-     * Displays the public registration form.
-     */
-    public function register()
-    {
-        return view('register');
-    }
+    public function register() { return view('register'); }
+    public function registerAdmin() { return view('register_admin'); }
 
-    /**
-     * Displays the admin registration form.
-     */
-    public function registerAdmin()
-    {
-        return view('register_admin');
-    }
-
-    /**
-     * Processes data from both registration forms.
-     */
     public function registerProcess()
     {
         $rules = [
@@ -57,9 +41,6 @@ class AccountController extends BaseController
         }
     }
 
-    /**
-     * Processes the login form.
-     */
     public function loginProcess()
     {
         $email = $this->request->getPost('email');
@@ -69,7 +50,6 @@ class AccountController extends BaseController
         $user = $usersModel->verifyUser($email, $password);
 
         if ($user) {
-            // SUCCESS! Credentials are valid.
             session()->set([
                 'isLoggedIn' => true,
                 'user_id'    => $user['id_pengguna'],
@@ -77,23 +57,16 @@ class AccountController extends BaseController
                 'role'       => $user['role']
             ]);
 
-            // --- THIS IS THE CRITICAL FIX ---
-            // Check the user's role and redirect accordingly.
             if ($user['role'] === 'Admin') {
-                return redirect()->to('/admin');
+                return redirect()->to('/admin'); // Admin goes to the office tower
             } else {
-                // ...to this. The new route we created in Step 2.
-                return redirect()->to('/dpr-data');
+                return redirect()->to('/dpr-data'); // Public user goes to the data view
             }
         } else {
-            // FAILURE! Credentials are not valid.
             return redirect()->back()->with('error', 'Login failed. Please check your email and password.');
         }
     }
 
-    /**
-     * Logs the user out.
-     */
     public function logout()
     {
         session()->destroy();

@@ -6,7 +6,7 @@ use App\Models\AnggotaModel;
 
 class Dpr extends BaseController
 {
-    public function index()
+    public function view_dpr()
     {
         // 1. Create an instance of our new model
         $anggotaModel = new AnggotaModel();

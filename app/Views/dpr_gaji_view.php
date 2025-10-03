@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <title>Data Gaji Anggota DPR</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .anggota-card { border: 1px solid #ccc; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .anggota-header { background-color: #f7f7f7; padding: 15px; border-bottom: 1px solid #ccc; }
+        body { font-family: sans-serif; padding: 20px; background-color: #000000ff}
+        .anggota-card { border: 1px solid #3a3a3aff; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(145, 145, 145, 0.1); }
+        .anggota-header { background-color: #252525ff; padding: 15px; border-bottom: 1px solid #242424ff; }
         .anggota-header h2 { margin: 0; }
-        .anggota-header span { color: #555; }
+        .anggota-header span { color: #ffffffff; }
         table { width: 100%; border-collapse: collapse; }
         th, td { text-align: left; padding: 12px 15px; border-bottom: 1px solid #eee; }
-        th { background-color: #f2f2f2; }
+        th { background-color: #050303ff; }
         td.nominal { text-align: right; font-family: monospace; }
         .total { font-weight: bold; }
     </style>
 </head>
-<body>
+<body style="color: #ffffffff">
     <h1>Data Gaji Anggota DPR</h1>
 
     <?php foreach ($anggotaData as $anggota): ?>

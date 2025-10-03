@@ -80,11 +80,10 @@ class AccountController extends BaseController
             // --- THIS IS THE CRITICAL FIX ---
             // Check the user's role and redirect accordingly.
             if ($user['role'] === 'Admin') {
-                // If they are an Admin, send them to the admin dashboard.
                 return redirect()->to('/admin');
             } else {
-                // If they are a Public user, send them to the public dashboard.
-                return redirect()->to('/dashboard');
+                // ...to this. The new route we created in Step 2.
+                return redirect()->to('/dpr-data');
             }
         } else {
             // FAILURE! Credentials are not valid.

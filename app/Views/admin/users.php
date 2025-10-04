@@ -26,6 +26,7 @@
                     <td><?= esc($user['email']) ?></td>
                     <td><?= esc($user['role']) ?></td>
                     <td>
+                        <a href="/admin/users/edit/<?= esc($user['id_pengguna']) ?>" class="btn btn-primary" style="background-color: #ffc107; border-color: #ffc107;">Edit</a>
                         <a href="/admin/users/delete/<?= esc($user['id_pengguna']) ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
                     </td>
                 </tr>

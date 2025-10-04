@@ -9,25 +9,23 @@ class CreatePenggajianTable extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id_komponen' => [
-                'type'       => 'INT',
-                'constraint' => 11,
+            'id_komponen_gaji' => [
+                'type'       => 'BIGINT',
+                'constraint' => 20,
                 'unsigned'   => true,
+                // NO 'auto_increment' here
             ],
             'id_anggota' => [
-                'type'       => 'INT',
-                'constraint' => 11,
+                'type'       => 'BIGINT',
+                'constraint' => 20,
                 'unsigned'   => true,
+                // NO 'auto_increment' here
             ],
         ]);
 
-        // A composite primary key to ensure no member gets the same component twice.
-        $this->forge->addPrimaryKey(['id_komponen', 'id_anggota']);
-
-        // Foreign key constraints
-        $this->forge->addForeignKey('id_komponen', 'komponen_gaji', 'id_komponen', 'CASCADE', 'CASCADE');
+        $this->forge->addPrimaryKey(['id_komponen_gaji', 'id_anggota']);
+        $this->forge->addForeignKey('id_komponen_gaji', 'komponen_gaji', 'id_komponen_gaji', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('id_anggota', 'anggota', 'id_anggota', 'CASCADE', 'CASCADE');
-
         $this->forge->createTable('penggajian');
     }
 

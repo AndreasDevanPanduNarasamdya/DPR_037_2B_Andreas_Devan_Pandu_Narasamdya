@@ -6,6 +6,10 @@
 
 <?= $this->section('content') ?>
     <h1>Manage Anggota DPR & Gaji</h1>
+
+    <div class="content-box" style="margin-bottom: 20px;">
+        <a href="/admin/anggota/new" class="btn btn-primary">Add New Anggota</a>
+    </div>
     
     <?php foreach ($anggotaData as $anggota): ?>
         <div class="content-box" style="margin-bottom: 20px;">
@@ -15,7 +19,11 @@
                     <span>Jabatan: <?= esc($anggota['jabatan']) ?></span>
                 </div>
                 <div>
-                    <a href="/admin/anggota/delete/<?= esc($anggota['id']) ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this member?');">Delete Member</a>
+                    <td>
+                        <a href="/admin/anggota/gaji/<?= esc($anggota['id']) ?>" class="btn btn-primary">Manage Gaji</a>
+                        <a href="/admin/anggota/edit/<?= esc($anggota['id']) ?>" class="btn btn-primary" style="background-color: #ffc107;">Edit Details</a>
+                        <a href="/admin/anggota/delete/<?= esc($anggota['id']) ?>" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+                    </td>
                 </div>
             </div>
             <table>
@@ -31,7 +39,7 @@
                     <tr>
                         <td><?= esc($komponen['nama_komponen']) ?></td>
                         <td><?= number_format($komponen['nominal'], 2, ',', '.') ?></td>
-                        <td><a href="#" class="btn btn-danger" style="font-size:12px;">Remove</a></td>
+                        <td><a href="#" class="btn btn-danger" style="font-size:12px;">Remove Component</a></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>

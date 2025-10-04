@@ -10,8 +10,8 @@ class CreatePenggunaTable extends Migration
     {
         $this->forge->addField([
             'id_pengguna' => [
-                'type'           => 'INT',
-                'constraint'     => 11,
+                'type'           => 'BIGINT', // CHANGED
+                'constraint'     => 20,       // CHANGED
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],

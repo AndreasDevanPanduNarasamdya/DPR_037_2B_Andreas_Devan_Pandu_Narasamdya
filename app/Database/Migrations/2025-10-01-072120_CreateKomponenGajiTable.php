@@ -9,39 +9,35 @@ class CreateKomponenGajiTable extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id_komponen' => [
-                'type'           => 'INT',
-                'constraint'     => 11,
+            'id_komponen_gaji' => [ // CORRECT NAME
+                'type'           => 'BIGINT',
+                'constraint'     => 20,
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
             'nama_komponen' => [
                 'type'       => 'VARCHAR',
-                'constraint' => '255',
+                'constraint' => '100',
             ],
             'kategori' => [
                 'type'       => 'ENUM',
                 'constraint' => ['Gaji Pokok', 'Tunjangan Melekat', 'Tunjangan Lain'],
-                'null'       => false,
             ],
-            'berlaku_untuk' => [
+            'jabatan' => [ // RENAMED from 'berlaku_untuk' to match your schema
                 'type'       => 'ENUM',
                 'constraint' => ['Ketua', 'Wakil Ketua', 'Anggota', 'Semua'],
-                'null'       => false,
             ],
             'nominal' => [
                 'type'       => 'DECIMAL',
-                'constraint' => '15,2',
-                'null'       => false,
+                'constraint' => '17,2',
             ],
             'satuan' => [
                 'type'       => 'ENUM',
-                'constraint' => ['Bulan', 'Periode'],
-                'null'       => false,
+                'constraint' => ['Bulan', 'Hari', 'Periode'],
             ],
         ]);
 
-        $this->forge->addKey('id_komponen', true);
+        $this->forge->addKey('id_komponen_gaji', true); // CORRECT PRIMARY KEY
         $this->forge->createTable('komponen_gaji');
     }
 

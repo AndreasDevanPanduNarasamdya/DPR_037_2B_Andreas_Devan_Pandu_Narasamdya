@@ -10,8 +10,8 @@ class CreateAnggotaTable extends Migration
     {
         $this->forge->addField([
             'id_anggota' => [
-                'type'           => 'INT',
-                'constraint'     => 11,
+                'type'           => 'BIGINT', // CHANGED
+                'constraint'     => 20,       // CHANGED
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],

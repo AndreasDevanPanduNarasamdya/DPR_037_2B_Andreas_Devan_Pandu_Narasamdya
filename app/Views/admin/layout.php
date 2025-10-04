@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <div class="main-content">
+        <?php if (session()->getFlashdata('message')): ?>
+            <div style="padding: 15px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; margin-bottom: 20px;">
+                <?= session()->getFlashdata('message') ?>
+            </div>
+        <?php endif; ?>
+
+        <?= $this->renderSection('content') ?>
+    </div>
     <title><?= $this->renderSection('title') ?> - Admin Panel</title>
     <style>
         body { font-family: sans-serif; margin: 0; background-color: #f4f6f9; color: #444; }
@@ -27,6 +36,7 @@
             <li><a href="/admin">Dashboard</a></li>
             <li><a href="/admin/users">Manage Pengguna</a></li>
             <li><a href="/admin/anggota">Manage Anggota</a></li>
+            <li><a href="/admin/komponen">Manage Komponen Gaji</a></li>
             <li><a href="/logout">Log Out</a></li>
         </ul>
     </div>

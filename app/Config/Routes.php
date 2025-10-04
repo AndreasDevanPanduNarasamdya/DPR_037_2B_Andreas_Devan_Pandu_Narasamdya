@@ -13,14 +13,38 @@ $routes->get('logout', 'AccountController::logout');
 
 $routes->get('dpr-data', 'Dpr::view_dpr', ['filter' => 'auth']);
 
+// In app/Config/Routes.php
+
+// In app/Config/Routes.php
+
 $routes->group('admin', ['filter' => 'admin'], function($routes) {
+    // ... (Dashboard and Users routes remain the same) ...
     $routes->get('/', 'AdminController::index');
     $routes->get('users', 'AdminController::usersList');
     $routes->get('users/new', 'AdminController::userNew');
-    $routes->post('users/create', 'AccountController::userCreate'); // Corrected to AccountController if that's where the logic is
+    $routes->post('users/create', 'AdminController::userCreate');
+    $routes->get('users/edit/(:num)', 'AdminController::userEdit/$1');
+    $routes->post('users/update/(:num)', 'AdminController::userUpdate/$1');
     $routes->get('users/delete/(:num)', 'AdminController::userDelete/$1');
+
+    // Anggota (DPR Members) Management
     $routes->get('anggota', 'AdminController::anggotaList');
+    $routes->get('anggota/new', 'AdminController::anggotaNew');           // <-- ADD THIS
+    $routes->post('anggota/create', 'AdminController::anggotaCreate');     // <-- ADD THIS
+    $routes->get('anggota/edit/(:num)', 'AdminController::anggotaEdit/$1');   // <-- ADD THIS
+    $routes->post('anggota/update/(:num)', 'AdminController::anggotaUpdate/$1'); // <-- ADD THIS
     $routes->get('anggota/delete/(:num)', 'AdminController::anggotaDelete/$1');
+
+    $routes->get('anggota/gaji/(:num)', 'AdminController::anggotaGaji/$1');
+    $routes->post('anggota/gaji/add/(:num)', 'AdminController::anggotaGajiAdd/$1');
+    $routes->get('anggota/gaji/remove/(:num)/(:num)', 'AdminController::anggotaGajiRemove/$1/$2');
+
+    $routes->get('komponen', 'AdminController::komponenList');
+    $routes->get('komponen/new', 'AdminController::komponenNew');
+    $routes->post('komponen/create', 'AdminController::komponenCreate');
+    $routes->get('komponen/edit/(:num)', 'AdminController::komponenEdit/$1');
+    $routes->post('komponen/update/(:num)', 'AdminController::komponenUpdate/$1');
+    $routes->get('komponen/delete/(:num)', 'AdminController::komponenDelete/$1');
 });
 
 $routes->setAutoRoute(false);

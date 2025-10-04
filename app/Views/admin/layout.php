@@ -27,6 +27,22 @@
         .btn { padding: 8px 12px; text-decoration: none; color: #fff; border-radius: 4px; font-size: 14px; }
         .btn-primary { background-color: #007bff; }
         .btn-danger { background-color: #dc3545; }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
     </style>
 </head>
 <body>
@@ -41,6 +57,18 @@
         </ul>
     </div>
     <div class="main-content">
+        
+        <?php if (session()->getFlashdata('message')): ?>
+            <div class="alert alert-success">
+                <?= session()->getFlashdata('message') ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger">
+                <?= session()->getFlashdata('error') ?>
+            </div>
+        <?php endif; ?>
         <?= $this->renderSection('content') ?>
     </div>
 </body>

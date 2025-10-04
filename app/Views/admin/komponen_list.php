@@ -1,5 +1,9 @@
 <?= $this->extend('admin/layout') ?>
-<?= $this->section('title') ?>Manage Salary Components<?= $this->endSection() ?>
+
+<?= $this->section('title') ?>
+    Manage Salary Components
+<?= $this->endSection() ?>
+
 <?= $this->section('content') ?>
     <h1>Manage Master Komponen Gaji</h1>
     <div class="content-box">
@@ -12,8 +16,7 @@
                     <th>Kategori</th>
                     <th>Jabatan</th>
                     <th>Nominal</th>
-                    <th>Actions</th>
-                </tr>
+                    <th>Actions</th> </tr>
             </thead>
             <tbody>
                 <?php foreach ($komponen_gaji as $komponen): ?>
@@ -24,7 +27,12 @@
                     <td><?= esc($komponen['jabatan']) ?></td>
                     <td><?= number_format($komponen['nominal'], 2, ',', '.') ?></td>
                     <td>
-                        </td>
+                        <a href="/admin/komponen/delete/<?= esc($komponen['id_komponen_gaji']) ?>" 
+                           class="btn btn-danger" 
+                           onclick="return confirm('Are you sure you want to delete this component?');">
+                           Delete
+                        </a>
+                    </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

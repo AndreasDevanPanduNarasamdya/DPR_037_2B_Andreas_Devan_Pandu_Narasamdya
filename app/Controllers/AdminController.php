@@ -306,4 +306,28 @@ class AdminController extends BaseController
                         ->delete();
         return redirect()->to('/admin/anggota/gaji/' . $anggota_id)->with('message', 'Component removed.');
     }
+
+    public function komponenDelete($id)
+    {
+        // 1. Get the necessary models
+        $komponenModel = new KomponenGajiModel();
+        $penggajianModel = new PenggajianModel();
+
+        // 2. Check for usage: See if any member is currently assigned this component.
+        $usageCount = $penggajianModel->where('id_komponen_gaji', $id)->countAllResults();
+
+        // 3. The Decision
+        if ($usageCount > 0) {
+            // FORBID DELETION: The component is in use.
+            // Redirect back with a specific error message.
+            return redirect()->to('/admin/komponen')->with('error', "Cannot delete component. It is currently assigned to {$usageCount} member(s). Please remove it from all members first via the 'Manage Anggota' page.");
+        
+        } else {
+            // ALLOW DELETION: The component is not in use.
+            $komponenModel->delete($id);
+            
+            // Redirect back with a success message.
+            return redirect()->to('/admin/komponen')->with('message', 'Salary component deleted successfully.');
+        }
+    }
 }

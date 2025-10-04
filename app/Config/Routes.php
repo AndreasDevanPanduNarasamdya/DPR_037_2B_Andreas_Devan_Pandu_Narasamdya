@@ -6,7 +6,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 
 $routes->get('register', 'AccountController::register');
-$routes->get('register-admin', 'AccountController::registerAdmin');
+$routes->get('register/admin', 'AccountController::registerAdmin');
 $routes->post('register/process', 'AccountController::registerProcess');
 $routes->post('login/process', 'AccountController::loginProcess');
 $routes->get('logout', 'AccountController::logout');

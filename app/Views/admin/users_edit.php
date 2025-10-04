@@ -10,6 +10,14 @@
         <?php $validation = \Config\Services::validation(); ?>
         <form action="/admin/users/update/<?= esc($user['id_pengguna']) ?>" method="POST">
             <div class="form-group">
+                <label for="nama_depan">First Name:</label>
+                <input type="text" name="nama_depan" value="<?= esc($user['nama_depan']) ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="nama_belakang">Last Name:</label>
+                <input type="text" name="nama_belakang" value="<?= esc($user['nama_belakang']) ?>">
+            </div>
+            <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" name="username" value="<?= esc($user['username']) ?>" required>
                 <?php if ($validation->hasError('username')): ?><div class="error-message"><?= $validation->getError('username') ?></div><?php endif; ?>

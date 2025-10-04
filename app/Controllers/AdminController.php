@@ -21,8 +21,6 @@ class AdminController extends BaseController
         return view('admin/dashboard', $data);
     }
 
-    // --- PENGGUNA (USER) CRUD METHODS ---
-
     public function usersList()
     {
         $usersModel = new UsersModel();
@@ -37,7 +35,6 @@ class AdminController extends BaseController
 
     public function userCreate()
     {
-        // This is the logic that processes the 'Add New User' form
         $rules = [
             'username' => 'required|is_unique[pengguna.username]',
             'email'    => 'required|valid_email|is_unique[pengguna.email]',
@@ -54,7 +51,6 @@ class AdminController extends BaseController
             'email'    => $this->request->getPost('email'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
             'role'     => $this->request->getPost('role'),
-            // You should add nama_depan and nama_belakang here too
         ];
 
         $usersModel = new UsersModel();
@@ -83,7 +79,6 @@ class AdminController extends BaseController
             'role'     => 'required|in_list[Admin,Public]'
         ];
 
-        // Only validate password if it's being changed
         if ($this->request->getPost('password') !== '') {
             $rules['password'] = 'required|min_length[8]';
         }
@@ -98,7 +93,6 @@ class AdminController extends BaseController
             'role'     => $this->request->getPost('role'),
         ];
 
-        // Only add password to the save array if it's being changed
         if ($this->request->getPost('password') !== '') {
             $dataToSave['password'] = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
         }
@@ -116,7 +110,6 @@ class AdminController extends BaseController
         return redirect()->to('/admin/users')->with('message', 'User deleted successfully.');
     }
 
-    // --- ANGGOTA METHODS ---
     public function anggotaList()
     {
         $anggotaModel = new AnggotaModel();
@@ -217,6 +210,8 @@ class AdminController extends BaseController
 
     public function komponenCreate()
     {
+        log_message('error', '--- STARTING komponenCreate METHOD ---');
+
         $rules = [
             'nama_komponen' => 'required|max_length[100]',
             'kategori'      => 'required|in_list[Gaji Pokok,Tunjangan Melekat,Tunjangan Lain]',
@@ -224,49 +219,67 @@ class AdminController extends BaseController
             'nominal'       => 'required|decimal',
             'satuan'        => 'required|in_list[Bulan,Hari,Periode]'
         ];
+        log_message('error', 'Validation rules have been defined.');
 
         if (!$this->validate($rules)) {
+            log_message('error', 'VALIDATION FAILED. Errors: ' . json_encode($this->validator->getErrors()));
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
+        log_message('error', 'Validation PASSED.');
 
-        $komponenModel = new KomponenGajiModel();
-        $komponenModel->save($this->request->getPost());
-        return redirect()->to('/admin/komponen')->with('message', 'Salary component created successfully.');
+        $dataToSave = $this->request->getPost();
+        log_message('error', 'Data received from form: ' . json_encode($dataToSave));
+
+        $db = \Config\Database::connect();
+        $komponenModel = new \App\Models\KomponenGajiModel();
+
+        log_message('error', 'Starting database transaction...');
+        $db->transStart();
+        
+        $saveResult = $komponenModel->save($dataToSave);
+        log_message('error', 'Model save() method returned: ' . ($saveResult ? 'true' : 'false'));
+        
+        if (!$saveResult) {
+            log_message('error', 'Model validation errors: ' . json_encode($komponenModel->errors()));
+        }
+
+        log_message('error', 'Completing transaction...');
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            log_message('error', 'DATABASE TRANSACTION FAILED. Changes were rolled back.');
+            return redirect()->back()->withInput()->with('error', 'Database transaction failed. Data was not saved.');
+        }
+        
+        log_message('error', 'DATABASE TRANSACTION SUCCEEDED. Changes were committed.');
+        log_message('error', '--- ENDING komponenCreate and redirecting ---');
+
+        return redirect()->to('/admin/komponen')->with('message', 'Salary component creation processed.');
     }
-
-// In AdminController.php
 
     public function anggotaGaji($anggota_id)
     {
-        // --- 1. Get the necessary models ---
         $anggotaModel = new AnggotaModel();
         $penggajianModel = new PenggajianModel();
         $komponenGajiModel = new KomponenGajiModel();
 
-        // --- 2. Find the specific Anggota ---
         $anggota = $anggotaModel->find($anggota_id);
 
-        // If no member is found with that ID, show a 404 error
         if (!$anggota) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the Anggota with ID: '. $anggota_id);
         }
 
-        // --- 3. Prepare the data array to send to the view ---
         $data = [];
         
-        // THIS IS THE KEY: Put the member's data into the array
         $data['anggota'] = $anggota;
 
-        // --- 4. Get the components the member already has ---
         $data['assigned_komponen'] = $penggajianModel
             ->where('id_anggota', $anggota_id)
             ->join('komponen_gaji', 'komponen_gaji.id_komponen_gaji = penggajian.id_komponen_gaji')
             ->findAll();
 
-        // Get the IDs of components they already have so we can exclude them
         $assignedIds = array_column($data['assigned_komponen'], 'id_komponen_gaji');
 
-        // --- 5. Get the components they are eligible for but don't have yet ---
         $availableKomponenQuery = $komponenGajiModel
             ->whereIn('jabatan', [$anggota['jabatan'], 'Semua']);
         
@@ -276,7 +289,6 @@ class AdminController extends BaseController
         
         $data['available_komponen'] = $availableKomponenQuery->findAll();
 
-        // --- 6. Load the view AND PASS THE COMPLETE $data ARRAY ---
         return view('admin/anggota_gaji', $data);
     }
 
@@ -288,7 +300,6 @@ class AdminController extends BaseController
             'id_komponen_gaji' => $this->request->getPost('id_komponen_gaji')
         ];
 
-        // Basic validation to prevent duplicates
         $exists = $penggajianModel->where($data)->first();
         if (!$exists) {
             $penggajianModel->insert($data);
@@ -309,25 +320,49 @@ class AdminController extends BaseController
 
     public function komponenDelete($id)
     {
-        // 1. Get the necessary models
         $komponenModel = new KomponenGajiModel();
         $penggajianModel = new PenggajianModel();
-
-        // 2. Check for usage: See if any member is currently assigned this component.
         $usageCount = $penggajianModel->where('id_komponen_gaji', $id)->countAllResults();
 
-        // 3. The Decision
         if ($usageCount > 0) {
-            // FORBID DELETION: The component is in use.
-            // Redirect back with a specific error message.
             return redirect()->to('/admin/komponen')->with('error', "Cannot delete component. It is currently assigned to {$usageCount} member(s). Please remove it from all members first via the 'Manage Anggota' page.");
         
         } else {
-            // ALLOW DELETION: The component is not in use.
             $komponenModel->delete($id);
             
-            // Redirect back with a success message.
             return redirect()->to('/admin/komponen')->with('message', 'Salary component deleted successfully.');
         }
+    }
+
+    public function komponenEdit($id)
+    {
+        $komponenModel = new KomponenGajiModel();
+        $data['komponen'] = $komponenModel->find($id);
+
+        if (!$data['komponen']) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the salary component with ID: '. $id);
+        }
+
+        return view('admin/komponen_edit', $data);
+    }
+
+    public function komponenUpdate($id)
+    {
+        $rules = [
+            'nama_komponen' => 'required|max_length[100]',
+            'kategori'      => 'required|in_list[Gaji Pokok,Tunjangan Melekat,Tunjangan Lain]',
+            'jabatan'       => 'required|in_list[Ketua,Wakil Ketua,Anggota,Semua]',
+            'nominal'       => 'required|decimal',
+            'satuan'        => 'required|in_list[Bulan,Hari,Periode]'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $komponenModel = new KomponenGajiModel();
+        $komponenModel->update($id, $this->request->getPost());
+
+        return redirect()->to('/admin/komponen')->with('message', 'Salary component updated successfully.');
     }
 }

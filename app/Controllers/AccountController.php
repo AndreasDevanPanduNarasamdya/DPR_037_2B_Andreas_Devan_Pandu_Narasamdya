@@ -58,9 +58,9 @@ class AccountController extends BaseController
             ]);
 
             if ($user['role'] === 'Admin') {
-                return redirect()->to('/admin'); // Admin goes to the office tower
+                return redirect()->to('/admin');
             } else {
-                return redirect()->to('/dpr-data'); // Public user goes to the data view
+                return redirect()->to('/dpr-data');
             }
         } else {
             return redirect()->back()->with('error', 'Login failed. Please check your email and password.');

@@ -6,7 +6,6 @@
 
 <?= $this->section('content') ?>
     <h1>Manage Anggota DPR & Gaji</h1>
-
     <div class="content-box" style="margin-bottom: 20px;">
         <a href="/admin/anggota/new" class="btn btn-primary">Add New Anggota</a>
     </div>
@@ -19,29 +18,26 @@
                     <span>Jabatan: <?= esc($anggota['jabatan']) ?></span>
                 </div>
                 <div>
-                    <td>
-                        <a href="/admin/anggota/gaji/<?= esc($anggota['id']) ?>" class="btn btn-primary">Manage Gaji</a>
-                        <a href="/admin/anggota/edit/<?= esc($anggota['id']) ?>" class="btn btn-primary" style="background-color: #ffc107;">Edit Details</a>
-                        <a href="/admin/anggota/delete/<?= esc($anggota['id']) ?>" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
-                    </td>
+                    <a href="/admin/anggota/gaji/<?= esc($anggota['id']) ?>" class="btn btn-primary">Manage Gaji</a>
+                    <a href="/admin/anggota/edit/<?= esc($anggota['id']) ?>" class="btn btn-primary" style="background-color: #ffc107;">Edit Details</a>
+                    <a href="/admin/anggota/delete/<?= esc($anggota['id']) ?>" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
                 </div>
             </div>
             <table>
-                <thead>
-                    <tr>
-                        <th>Komponen Gaji</th>
-                        <th>Nominal (IDR)</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
                 <tbody>
-                    <?php foreach ($anggota['gaji_components'] as $komponen): ?>
-                    <tr>
-                        <td><?= esc($komponen['nama_komponen']) ?></td>
-                        <td><?= number_format($komponen['nominal'], 2, ',', '.') ?></td>
-                        <td><a href="#" class="btn btn-danger" style="font-size:12px;">Remove Component</a></td>
-                    </tr>
-                    <?php endforeach; ?>
+                    <?php if (empty($anggota['gaji_components']) || $anggota['gaji_components'][0]['nama_komponen'] === null): ?>
+                        <tr><td colspan="3">No salary components assigned.</td></tr>
+                    <?php else: ?>
+                        <?php foreach ($anggota['gaji_components'] as $komponen): ?>
+                        <tr>
+                            <td><?= esc($komponen['nama_komponen']) ?></td>
+                            <td><?= number_format($komponen['nominal'], 2, ',', '.') ?></td>
+                            <td>
+                                <a href="/admin/anggota/gaji/remove/<?= esc($anggota['id']) ?>/<?= esc($komponen['id_komponen_gaji']) ?>" class="btn btn-danger" style="font-size:12px;" onclick="return confirm('Are you sure you want to remove this component?');">Remove</a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

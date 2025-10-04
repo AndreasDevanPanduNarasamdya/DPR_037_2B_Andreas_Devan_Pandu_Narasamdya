@@ -16,7 +16,8 @@
                     <th>Kategori</th>
                     <th>Jabatan</th>
                     <th>Nominal</th>
-                    <th>Actions</th> </tr>
+                    <th>Actions</th>
+                </tr>
             </thead>
             <tbody>
                 <?php foreach ($komponen_gaji as $komponen): ?>
@@ -27,6 +28,7 @@
                     <td><?= esc($komponen['jabatan']) ?></td>
                     <td><?= number_format($komponen['nominal'], 2, ',', '.') ?></td>
                     <td>
+                        <a href="/admin/komponen/edit/<?= esc($komponen['id_komponen_gaji']) ?>" class="btn btn-primary" style="background-color: #ffc107;">Edit</a>
                         <a href="/admin/komponen/delete/<?= esc($komponen['id_komponen_gaji']) ?>" 
                            class="btn btn-danger" 
                            onclick="return confirm('Are you sure you want to delete this component?');">

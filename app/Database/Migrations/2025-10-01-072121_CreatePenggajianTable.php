@@ -13,13 +13,11 @@ class CreatePenggajianTable extends Migration
                 'type'       => 'BIGINT',
                 'constraint' => 20,
                 'unsigned'   => true,
-                // NO 'auto_increment' here
             ],
             'id_anggota' => [
                 'type'       => 'BIGINT',
                 'constraint' => 20,
                 'unsigned'   => true,
-                // NO 'auto_increment' here
             ],
         ]);
 

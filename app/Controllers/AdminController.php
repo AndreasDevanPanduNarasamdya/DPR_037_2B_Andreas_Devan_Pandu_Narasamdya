@@ -238,20 +238,35 @@ class AdminController extends BaseController
 
     public function anggotaGaji($anggota_id)
     {
-        // ... (the first part of the function is here, getting the models and the $anggota data) ...
+        // --- 1. Get the necessary models ---
         $anggotaModel = new AnggotaModel();
         $penggajianModel = new PenggajianModel();
         $komponenGajiModel = new KomponenGajiModel();
+
+        // --- 2. Find the specific Anggota ---
         $anggota = $anggotaModel->find($anggota_id);
 
-        // ... (logic to get assigned_komponen and assignedIds is here) ...
+        // If no member is found with that ID, show a 404 error
+        if (!$anggota) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the Anggota with ID: '. $anggota_id);
+        }
+
+        // --- 3. Prepare the data array to send to the view ---
+        $data = [];
+        
+        // THIS IS THE KEY: Put the member's data into the array
+        $data['anggota'] = $anggota;
+
+        // --- 4. Get the components the member already has ---
         $data['assigned_komponen'] = $penggajianModel
             ->where('id_anggota', $anggota_id)
             ->join('komponen_gaji', 'komponen_gaji.id_komponen_gaji = penggajian.id_komponen_gaji')
             ->findAll();
+
+        // Get the IDs of components they already have so we can exclude them
         $assignedIds = array_column($data['assigned_komponen'], 'id_komponen_gaji');
 
-        // Get components they are eligible for
+        // --- 5. Get the components they are eligible for but don't have yet ---
         $availableKomponenQuery = $komponenGajiModel
             ->whereIn('jabatan', [$anggota['jabatan'], 'Semua']);
         
@@ -261,11 +276,7 @@ class AdminController extends BaseController
         
         $data['available_komponen'] = $availableKomponenQuery->findAll();
 
-        // --- THIS IS THE MOST IMPORTANT DEBUG STEP ---
-        // This will stop the script and show us the exact SQL query.
-        dd($komponenGajiModel->getLastQuery()->getQuery());
-        
-        // The view will not be loaded yet.
+        // --- 6. Load the view AND PASS THE COMPLETE $data ARRAY ---
         return view('admin/anggota_gaji', $data);
     }
 

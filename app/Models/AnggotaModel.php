@@ -17,9 +17,12 @@ class AnggotaModel extends Model
     {
         // We use the Query Builder to create a complex query
         return $this->db->table('anggota')
-            ->select('anggota.id_anggota, anggota.nama_depan, anggota.nama_belakang, anggota.jabatan, komponen_gaji.nama_komponen, komponen_gaji.nominal, komponen_gaji.satuan')
+            ->select('anggota.id_anggota, anggota.nama_depan, anggota.nama_belakang, anggota.jabatan, komponen_gaji.nama_komponen, komponen_gaji.nominal, komponen_gaji.satuan, penggajian.id_komponen_gaji')
             ->join('penggajian', 'penggajian.id_anggota = anggota.id_anggota', 'left')
-            ->join('komponen_gaji', 'komponen_gaji.id_komponen = penggajian.id_komponen', 'left')
+            
+            // THIS IS THE FIX: Use the correct column name 'id_komponen_gaji' on both tables
+            ->join('komponen_gaji', 'komponen_gaji.id_komponen_gaji = penggajian.id_komponen_gaji', 'left')
+            
             ->orderBy('anggota.id_anggota', 'ASC') // Order by member
             ->get()
             ->getResultArray(); // Return the results as an array
